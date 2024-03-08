@@ -20,7 +20,7 @@ function update()
     player.x -= 2;	
     if(right &&	player.x <=	canvas.height-15)
     player.x += 2;
-    
+    // asdsa
 }
 
 //Redraw canvas
