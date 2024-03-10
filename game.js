@@ -2,7 +2,7 @@ import { Player } from "./player.js";
 
 const canvas = document.getElementById('game');
 canvas.width = 1000;
-canvas.height = 800;
+canvas.height = 1000;
 
 const ctx = canvas.getContext('2d');
 const player = new Player();
@@ -12,15 +12,14 @@ let up, right, down, left = false;
 //Main logic
 function update()
 {
-    if(up && player.x >= 5)
-    player.y -= 2;	
-    if(down	&&	player.y <=	canvas.height-15)
-    player.y += 2;
+    if(up && player.x >= 5 && player.groundCheck)
+    player.velocityY -= player.jumpPower;	
     if(left && player.x >= 5)
-    player.x -= 2;	
+    player.velocityX -= player.speed;	
     if(right &&	player.x <=	canvas.height-15)
-    player.x += 2;
-    // asdsa
+    player.velocityX += player.speed;
+
+    player.update();
 }
 
 //Redraw canvas
@@ -31,7 +30,10 @@ function draw()
 }
 
 window.addEventListener('keydown', Move);
-window.addEventListener('keyup', () => {
+window.addEventListener('keyup', MoveStop);
+
+function MoveStop(event)
+{
     let keyCode = event.keyCode;
     console.log(keyCode);
     switch (keyCode)
@@ -45,11 +47,8 @@ window.addEventListener('keyup', () => {
         case 68:
             right = false;
             break;
-        case 83:
-            down = false;
-            break;
     }
-});
+};
 
 function Move(event)
 {
@@ -59,28 +58,13 @@ function Move(event)
     {
         case 65:
             left = true;
-			right = false;
-			up = false;
-			down = false;
             break;
         case 87:
-            left = false;
-            right = false;
             up = true;
-            down = false;
             break;
         case 68:
-            left = false;
             right = true;
-            up = false;
-            down = false;
-            break;
-        case 83:
-            left = false;
-            right = false;
-            up = false;
-            down = true;
-            break;
+            break;  
     }
     event.preventDefault();
 }
@@ -95,7 +79,7 @@ function mainLoop()
     if(right)
 	player.right();
     if(left)
-	player.left();
+	player.left();  
 
     update();
     draw(ctx);

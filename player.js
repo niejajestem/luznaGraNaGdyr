@@ -1,5 +1,7 @@
 function Player()
 {
+    const canvas = document.getElementById('game');
+
     this.img = new Image();
 
     this.img.onload = () =>{
@@ -10,10 +12,16 @@ function Player()
     
     this.x = 300;
     this.y = 400;
-    this.velocity = 2;
-    this.limit = 300;
+    this.size = 64;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.counter = 0;
     this.delay = 5;
+    this.gravity = 4;
+    this.speed = 2;
+    this.friction = 0.3;
+    this.jumpPower = 10;
+    this.groundCheck = true;
 
     this.column	= 0;	
 	this.row = 0;	
@@ -23,12 +31,42 @@ function Player()
     //logika sterująca obiektem
     this.update = function()
     {
+        this.velocityY += this.gravity;
+        this.y += this.velocityY;
+        this.x += this.velocityX;
 
+        this.velocityX /= this.friction + 1;
+        this.velocityY /= this.friction + 1;
+
+        this.WallColision();
+    }
+
+    this.WallColision = function()
+    {
+        if (this.x + this.frameWidth < this.frameWidth)
+        {
+            this.x = 0;
+        }
+
+        if (this.y + this.frameHeight < this.frameHeight)
+        {
+            this.y = 0;
+        }
+
+        if (this.x + this.frameWidth > canvas.width)
+        {
+            this.x = canvas.width - this.frameWidth;
+        }
+
+        if (this.y + this.frameHeight > canvas.height)
+        {
+            this.y = canvas.height - this.frameHeight;
+        }
     }
 
     this.forward = function()
     {
-        console.log(this.counter);
+        // console.log(this.counter);
         this.row = 0;
         this.counter++;
         if(this.counter	> this.delay)
@@ -42,10 +80,9 @@ function Player()
         }
     }
 
-
     this.backwards = function()
     {
-        console.log(this.counter);
+        // console.log(this.counter);
         this.row = 3;
         this.counter++;
         if(this.counter	> this.delay)
@@ -61,7 +98,7 @@ function Player()
 
     this.right = function()
     {
-        console.log(this.counter);
+        // console.log(this.counter);
         this.row = 2;
         this.counter++;
         if(this.counter	> this.delay)
@@ -77,7 +114,7 @@ function Player()
 
     this.left = function()
     {
-        console.log(this.counter);
+        // console.log(this.counter);
         this.row = 1;
         this.counter++;
         if(this.counter	> this.delay)
