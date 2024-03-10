@@ -13,10 +13,10 @@ let up, right, down, left = false;
 function update()
 {
     if(up && player.x >= 5 && player.groundCheck)
-    player.velocityY -= player.jumpPower;	
+    player.velocityY -= player.jumpPower;
     if(left && player.x >= 5)
-    player.velocityX -= player.speed;	
-    if(right &&	player.x <=	canvas.height-15)
+    player.velocityX -= player.speed;
+    if(right &&	player.x <=	canvas.height)
     player.velocityX += player.speed;
 
     player.update();
@@ -35,7 +35,7 @@ window.addEventListener('keyup', MoveStop);
 function MoveStop(event)
 {
     let keyCode = event.keyCode;
-    console.log(keyCode);
+    // console.log(keyCode);
     switch (keyCode)
     {
         case 65:
@@ -53,7 +53,7 @@ function MoveStop(event)
 function Move(event)
 {
     let keyCode = event.keyCode;
-    console.log(keyCode);
+    // console.log(keyCode);
     switch (keyCode)
     {
         case 65:
@@ -74,12 +74,10 @@ function mainLoop()
 {
     if(down)
 	player.forward();
-    if(up)
-	player.backwards();
     if(right)
 	player.right();
     if(left)
-	player.left();  
+	player.left();
 
     update();
     draw(ctx);
