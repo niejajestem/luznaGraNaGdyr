@@ -12,12 +12,12 @@ let up, right, down, left = false;
 //Main logic
 function update()
 {
-    if(up && player.x >= 5 && player.groundCheck)
-    player.velocityY -= player.jumpPower;
+    if(up && player.x >= 5)
+    player.Jump();
     if(left && player.x >= 5)
-    player.velocityX -= player.speed;
+    player.Walk(false);
     if(right &&	player.x <=	canvas.height)
-    player.velocityX += player.speed;
+    player.Walk(true);
 
     player.update();
 }
@@ -43,6 +43,7 @@ function MoveStop(event)
             break;
         case 87:
             up = false;
+            player.groundCheck = 0;
             break;
         case 68:
             right = false;

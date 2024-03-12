@@ -17,15 +17,16 @@ function Player()
     this.velocityY = 0;
     this.counter = 0;
     this.delay = 10;
-    this.gravityPower = 5;
+    this.gravityPower = 0.2;
     this.gravity = 0;
-    this.maxGravity = 5;
-    this.speed = 1;
+    this.maxGravity = 3;
+    this.acceleration = 1;
     this.maxSpeed = 10;
-    this.friction = 0.3;
-    this.jumpPower = 200;
-    this.maxJumpSpeed = 80;
-    this.groundCheck = false;
+    this.frictionX = 0.2;
+    this.frictionY = 0.01;
+    this.jumpPower = 2.5;
+    this.maxJump = 20;
+    this.groundCheck = 0;
 
     this.column	= 0;	
 	this.row = 0;	
@@ -36,6 +37,14 @@ function Player()
     {
         this.gravity += this.gravityPower;
 
+        if(this.velocityX > this.maxSpeed)
+        {
+            this.velocityX = this.maxSpeed;
+        }else if(-this.velocityX > this.maxSpeed)
+        {
+            this.velocityX = -this.maxSpeed;
+        }
+
         if(this.gravity > this.maxGravity)
         {
             this.gravity = this.maxGravity;
@@ -45,15 +54,37 @@ function Player()
         
         this.Move();
 
-        this.velocityX /= this.friction + 1;
-        this.velocityY /= this.friction + 1;
+        this.velocityX /= this.frictionX + 1;
+        this.velocityY /= this.frictionY + 1;
 
         this.WallColision();
+
+    }
+
+    this.Walk = function(right)
+    {
+        if(right)
+        {
+            this.velocityX += this.acceleration;
+        }
+        else
+        {
+            this.velocityX -= this.acceleration;
+        }
+    }
+
+    this.Jump = function()
+    {
+        if(this.groundCheck > 0)
+        {
+            this.velocityY -= this.jumpPower;
+            this.groundCheck--;
+            console.log("cos");
+        }
     }
     
     this.Move = function()
     {
-    
         this.y += this.velocityY;
         this.x += this.velocityX;
     }
@@ -83,11 +114,7 @@ function Player()
             this.y = canvas.height - this.frameHeight;
             this.velocityY = 0;
             this.gravity = 0;
-            this.groundCheck = true;
-        }
-        else
-        {
-            this.groundCheck = false;
+            this.groundCheck = this.maxJump;
         }
     }
 
